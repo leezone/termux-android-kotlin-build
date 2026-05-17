@@ -1,0 +1,24 @@
+# __APP_LABEL__
+
+这是一个通过 `termux-android-kotlin-workspace` skill 初始化的 Termux Android Kotlin 项目。
+
+## 快速开始
+
+```sh
+. ./env-android.sh
+sh ./scripts/setup-android-sdk.sh
+sh ./scripts/setup-re-tools.sh
+sh ./build.sh
+sh ./install.sh
+sh ./launch.sh
+```
+
+## 反编译
+
+```sh
+sh ./decompile.sh build/app-debug.apk
+```
+
+## 包名
+
+`__PACKAGE_NAME__`

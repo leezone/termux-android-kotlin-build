@@ -21,6 +21,10 @@ If `decompiled/<apk-name>/jadx/sources/` exists, keep going. The exported Java i
 
 The decompile script treats this as non-fatal and preserves the rest of the metadata and decode outputs.
 
+## `sdkmanager` cannot fetch manifests
+
+The bundled setup scripts try `sdkmanager` first. If that fails and an existing local SDK already contains `platforms/android-34`, they fall back to copying that platform into the shared SDK root.
+
 ## Git says `dubious ownership`
 
 Mark the repository as safe:

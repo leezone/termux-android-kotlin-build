@@ -96,6 +96,38 @@ sh scripts/install-local-skill.sh
 
 安装后，后续在这个仓库中做构建、安装、反编译、修复脚本时，可以优先复用现有流程，而不是重新搭建工具链。
 
+## 用 Skill 初始化正式项目
+
+现在这个 skill 已经不只是当前仓库的说明书，也可以直接在任意目录里生成一个新的 Termux Android Kotlin 项目。
+
+推荐流程：
+
+```sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-re-tools.sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /data/data/com.termux/files/usr/tmp/my-app com.example.myapp "My App"
+```
+
+或者一步完成：
+
+```sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/bootstrap-project.sh /data/data/com.termux/files/usr/tmp/my-app com.example.myapp "My App"
+```
+
+初始化后的新项目会自带：
+
+- `build.sh`
+- `install.sh`
+- `launch.sh`
+- `decompile.sh`
+- `apktool.sh`
+- `env-android.sh`
+- `scripts/setup-android-sdk.sh`
+- `scripts/setup-re-tools.sh`
+- Kotlin `MainActivity.kt` 模板
+
+也就是说，后续正式编码时，你可以直接复用这套 skill 的脚手架，而不是从头再搭环境。
+
 ## Git 与推送
 
 当前仓库已经初始化为 Git 仓库。常用命令：

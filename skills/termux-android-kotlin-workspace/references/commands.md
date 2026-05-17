@@ -14,6 +14,20 @@ sh ./scripts/setup-re-tools.sh
 sh ./scripts/install-local-skill.sh
 ```
 
+## Portable skill bootstrap
+
+```sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-re-tools.sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /path/to/my-app com.example.myapp "My App"
+```
+
+One-shot bootstrap:
+
+```sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/bootstrap-project.sh /path/to/my-app com.example.myapp "My App"
+```
+
 ## Build and run
 
 ```sh

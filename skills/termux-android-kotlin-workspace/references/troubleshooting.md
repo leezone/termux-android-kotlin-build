@@ -37,6 +37,25 @@ export SDKMANAGER_PROXY_PORT=2080
 
 Do not use a mirror hostname such as `mirrors.tuna.tsinghua.edu.cn` as `proxy_host`. That host is a mirror, not a forward proxy.
 
+For Neko-based setups, prefer testing the explicit HTTP proxy path first:
+
+```sh
+curl --proxy http://127.0.0.1:2080 https://dl.google.com/android/repository/addons_list-1.xml -o /dev/null -v
+```
+
+If `example.com` is reachable through the proxy but `dl.google.com/android/repository/...` fails, the usual causes are:
+
+- current node is unstable for Google download domains
+- route differs between browser TUN traffic and Termux explicit proxy traffic
+- `sdkmanager` needs a retry after switching nodes
+
+In that case:
+
+1. switch Neko node
+2. retry the same `curl`
+3. rerun `install-toolchain.sh` or `setup-android-sdk.sh`
+4. if still blocked, use `ANDROID_PLATFORM_SRC`
+
 ## Git says `dubious ownership`
 
 Mark the repository as safe:

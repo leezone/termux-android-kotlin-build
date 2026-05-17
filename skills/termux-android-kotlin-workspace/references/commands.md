@@ -44,6 +44,15 @@ export SDKMANAGER_PROXY_PORT=2080
 sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh 34
 ```
 
+Retry Android 9 platform after switching Neko node:
+
+```sh
+export SDKMANAGER_PROXY_TYPE=http
+export SDKMANAGER_PROXY_HOST=127.0.0.1
+export SDKMANAGER_PROXY_PORT=2080
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh 28 34
+```
+
 ## Build and run
 
 ```sh

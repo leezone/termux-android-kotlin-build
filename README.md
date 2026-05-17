@@ -91,6 +91,13 @@ sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh 
 - `mirrors.tuna.tsinghua.edu.cn` 是镜像站，不是 HTTP 代理
 - 在 Termux `aarch64` 下，优先安装 `platforms;android-XX`，不要依赖 Google 官方 `platform-tools` / `build-tools` 的 Linux 二进制
 
+目前实测结论：
+
+- skill 的初始化、编译、反编译逻辑本身是正常的
+- 真正最容易失败的是 `sdkmanager` 下载平台包这一步
+- 在 Neko 场景下，显式使用 `HTTP` 代理参数访问 `dl.google.com` 比直接猜测 `SOCKS5` 更稳
+- 如果 `platforms;android-28` 这类旧平台第一次没拉下来，重新切节点或重试一次后可能恢复正常
+
 ## 编译、安装、启动
 
 ```sh
@@ -210,6 +217,11 @@ export https_proxy=http://127.0.0.1:2080
 - 这套流程面向真实 Android 设备，不包含模拟器支持。
 - `jadx` 在部分 APK 上可能报告“部分反编译错误”，但通常仍会导出可用源码。
 - 当前 Termux 下的 `d8` 对新版 Kotlin metadata 可能输出信息级提示，但只要命令退出成功，APK 仍可正常生成。
+- 下载 Android 平台包时，最脆弱的环节是 `sdkmanager -> dl.google.com/android/repository`。一旦网络抖动，可优先尝试：
+  - 重试
+  - 更换 Neko 节点
+  - 显式设置 `SDKMANAGER_PROXY_TYPE=http`
+  - 使用 `ANDROID_PLATFORM_SRC` 做离线导入
 
 ## English Summary
 

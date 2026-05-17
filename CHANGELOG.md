@@ -9,3 +9,4 @@
 - 增加仓库内 skill：`termux-android-kotlin-workspace`
 - README 改为中文优先，并保留英文摘要
 - skill 升级为可移植脚手架，支持在新目录初始化 Kotlin Android 项目
+- 补充 Neko / sdkmanager 代理排障结论与网络抖动说明

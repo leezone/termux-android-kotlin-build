@@ -73,4 +73,6 @@ Or one-shot:
 - If GitHub downloads are unstable, use `127.0.0.1:2080` as an HTTP/HTTPS proxy.
 - If `build.sh` prints Kotlin metadata info lines from `d8`, treat them as noise unless the command exits nonzero.
 - If `jadx` exits with partial errors but exports sources, continue and inspect the generated output under `decompiled/`.
+- The skill logic is stable; the least reliable step is downloading Android platforms with `sdkmanager`.
+- In Neko environments, explicit `HTTP` proxy settings for `sdkmanager` are usually the first thing to try.
 - If a task needs exact commands or deeper troubleshooting, read the matching file in `references/`.

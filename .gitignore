@@ -1,0 +1,7 @@
+/.downloads/
+/android-sdk/
+/build/
+/decompiled/
+/debug.keystore
+/tools/
+/*.apk

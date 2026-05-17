@@ -1,28 +1,35 @@
-# Termux Android Kotlin Build
+# Termux 安卓 Kotlin 本地编译与反编译环境
 
-This repository provides a local Android APK build and reverse-engineering workflow for Termux on Android. It uses Kotlin for app code and Termux-native tools for packaging, signing, and decompilation.
+这个仓库提供一套在 Android 手机上的 Termux 环境中直接使用的 APK 工作流，包含：
 
-## What this repo does
+- Kotlin Android 应用本地编译
+- APK 打包与调试签名
+- 当前手机直接安装与启动
+- `jadx` + `apktool` 反编译与资源解包
 
-- Builds a Kotlin Android APK locally in Termux
-- Signs the APK with a generated debug keystore
-- Installs and launches the app on the current phone
-- Decompiles APKs with `jadx` and `apktool`
+## 功能概览
 
-## Project layout
+- 在 Termux 中本地生成 Android APK
+- 使用自动生成的 `debug.keystore` 完成签名
+- 支持直接打开系统安装器安装 APK
+- 支持将 APK 反编译成 Java 源码、smali 与资源文件
 
-- `src/com/example/termuxlocalapp/MainActivity.kt`: sample Kotlin activity
-- `build.sh`: compile, dex, package, and sign the APK
-- `install.sh`: open the Android package installer
-- `launch.sh`: launch the installed app
-- `decompile.sh`: run `jadx`, metadata dumps, and optional `apktool`
-- `scripts/setup-android-sdk.sh`: install Android platform files into Termux storage
-- `scripts/setup-re-tools.sh`: install `jadx` and download `apktool`
-- `env-android.sh`: export `JAVA_HOME`, `ANDROID_HOME`, and Kotlin paths
+## 目录结构
 
-## First-time setup
+- `src/com/example/termuxlocalapp/MainActivity.kt`：示例 Kotlin Activity
+- `build.sh`：编译、dex、打包、签名
+- `install.sh`：调用系统安装器安装 APK
+- `launch.sh`：启动已安装应用
+- `decompile.sh`：执行 `jadx`、`aapt` 元数据导出、可选 `apktool` 解包
+- `apktool.sh`：直接调用本地 `apktool.jar`
+- `env-android.sh`：导出 `JAVA_HOME`、`ANDROID_HOME`、Kotlin 路径
+- `scripts/setup-android-sdk.sh`：安装 Android SDK 平台文件
+- `scripts/setup-re-tools.sh`：安装 `jadx` 并下载 `apktool`
+- `skills/termux-android-kotlin-workspace/SKILL.md`：仓库内置 skill
 
-Run these once in a fresh Termux environment:
+## 首次环境准备
+
+首次使用建议执行：
 
 ```sh
 cd /storage/emulated/0/termux/project/1
@@ -30,9 +37,13 @@ sh scripts/setup-android-sdk.sh
 sh scripts/setup-re-tools.sh
 ```
 
-The Android SDK is stored at `/data/data/com.termux/files/usr/tmp/termux-android-sdk`. The project currently targets API 34 and uses JDK 17.
+当前默认环境：
 
-## Build, install, launch
+- Android SDK：`/data/data/com.termux/files/usr/tmp/termux-android-sdk`
+- JDK：17
+- Target API：34
+
+## 编译、安装、启动
 
 ```sh
 cd /storage/emulated/0/termux/project/1
@@ -42,53 +53,63 @@ sh install.sh
 sh launch.sh
 ```
 
-Build output:
+产物位置：
 
-- Signed APK: `build/app-debug.apk`
-- Unsigned APK: `build/app-unsigned.apk`
-- Debug keystore: `debug.keystore`
+- 已签名 APK：`build/app-debug.apk`
+- 未签名 APK：`build/app-unsigned.apk`
+- 调试签名：`debug.keystore`
 
-## Reverse engineering
+## 反编译用法
 
-Decompile the APK produced by this repo:
+反编译当前仓库生成的 APK：
 
 ```sh
 sh decompile.sh build/app-debug.apk
 ```
 
-Outputs:
+输出目录：
 
-- `decompiled/<apk-name>/jadx/`: Java sources and extracted resources
-- `decompiled/<apk-name>/apktool/`: smali and decoded resources when `apktool.jar` is present
-- `decompiled/<apk-name>/meta/`: `aapt` and archive metadata dumps
+- `decompiled/<apk-name>/jadx/`：Java 源码与提取后的资源
+- `decompiled/<apk-name>/apktool/`：smali、清单、资源解包结果
+- `decompiled/<apk-name>/meta/`：`aapt` 和归档元数据输出
 
-Run `apktool` directly:
+直接运行 `apktool`：
 
 ```sh
 sh apktool.sh d build/app-debug.apk -o out/apktool
 ```
 
-## Networking note
+## Git 与推送
 
-If GitHub or other upstream downloads are unstable in Termux, use the local proxy:
+当前仓库已经初始化为 Git 仓库。常用命令：
+
+```sh
+git add .
+git commit -m "更新说明或脚本"
+export http_proxy=http://127.0.0.1:2080
+export https_proxy=http://127.0.0.1:2080
+git push
+```
+
+当前远端仓库：
+
+`https://github.com/leezone/termux-android-kotlin-build`
+
+## 网络与代理
+
+如果访问 GitHub 或下载上游依赖较慢，先设置本地代理：
 
 ```sh
 export http_proxy=http://127.0.0.1:2080
 export https_proxy=http://127.0.0.1:2080
 ```
 
-## Known constraints
+## 已知限制
 
-- This workflow is designed for a real Android device, not an emulator.
-- The current `d8` build can emit Kotlin metadata info lines; the APK still builds and verifies successfully.
-- `jadx` may report partial decompilation errors on some APKs while still exporting usable sources.
+- 这套流程面向真实 Android 设备，不包含模拟器支持。
+- `jadx` 在部分 APK 上可能报告“部分反编译错误”，但通常仍会导出可用源码。
+- 当前 Termux 下的 `d8` 对新版 Kotlin metadata 可能输出信息级提示，但只要命令退出成功，APK 仍可正常生成。
 
-## Git workflow
+## English Summary
 
-This directory was prepared to be versioned in Git. Recommended commands:
-
-```sh
-git init
-git add .
-git commit -m "Add Termux Android Kotlin build workflow"
-```
+This repository provides a Termux-based Android workflow for Kotlin APK build, install, launch, and reverse engineering on a real Android device. Use `sh build.sh` to build the APK, `sh install.sh` to install it, and `sh decompile.sh build/app-debug.apk` to export Java sources, smali, and metadata.

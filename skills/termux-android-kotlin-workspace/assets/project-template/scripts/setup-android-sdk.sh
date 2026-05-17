@@ -12,8 +12,8 @@ SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
 
 copy_existing_platform() {
   for CANDIDATE in \
-    /data/data/com.termux/files/usr/tmp/termux-android-sdk \
-    /storage/emulated/0/termux/project/1/android-sdk
+    "$PROJECT_ROOT/android-sdk" \
+    /data/data/com.termux/files/usr/tmp/termux-android-sdk
   do
     if [ -f "$CANDIDATE/platforms/android-34/android.jar" ]; then
       mkdir -p "$SDK_ROOT/platforms"

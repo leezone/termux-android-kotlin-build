@@ -31,25 +31,42 @@
 
 ## 首次环境准备
 
-首次使用建议执行：
+这里分成两个场景。
+
+### 场景 A：直接使用当前仓库
+
+如果你就是在当前仓库里继续维护和测试，进入仓库目录后执行：
 
 ```sh
-cd /storage/emulated/0/termux/project/1
+cd <repo-dir>
 sh scripts/setup-android-sdk.sh
 sh scripts/setup-re-tools.sh
 sh scripts/install-local-skill.sh
 ```
 
-当前默认环境：
+当前仓库默认兼容的环境：
 
 - Android SDK：`/data/data/com.termux/files/usr/tmp/termux-android-sdk`
 - JDK：17
 - Target API：34
 
+### 场景 B：正式项目用 skill 初始化
+
+如果你后续要做正式项目，建议直接用 skill 起一个新目录，而不是继续在这个演示仓库里写：
+
+```sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/bootstrap-project.sh /path/to/my-app com.example.myapp "My App"
+```
+
+skill 初始化出的新项目默认使用共享工具目录：
+
+- Android SDK：`~/.local/share/termux-android-kotlin/sdk`
+- apktool：`~/.local/share/termux-android-kotlin/apktool.jar`
+
 ## 编译、安装、启动
 
 ```sh
-cd /storage/emulated/0/termux/project/1
+cd <repo-dir>
 . ./env-android.sh
 sh build.sh
 sh install.sh
@@ -105,13 +122,13 @@ sh scripts/install-local-skill.sh
 ```sh
 sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh
 sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-re-tools.sh
-sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /data/data/com.termux/files/usr/tmp/my-app com.example.myapp "My App"
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /path/to/my-app com.example.myapp "My App"
 ```
 
 或者一步完成：
 
 ```sh
-sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/bootstrap-project.sh /data/data/com.termux/files/usr/tmp/my-app com.example.myapp "My App"
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/bootstrap-project.sh /path/to/my-app com.example.myapp "My App"
 ```
 
 初始化后的新项目会自带：

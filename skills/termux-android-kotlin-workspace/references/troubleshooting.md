@@ -30,5 +30,5 @@ The bundled setup scripts try `sdkmanager` first. If that fails and an existing 
 Mark the repository as safe:
 
 ```sh
-git config --global --add safe.directory /storage/emulated/0/termux/project/1
+git config --global --add safe.directory "$(pwd)"
 ```

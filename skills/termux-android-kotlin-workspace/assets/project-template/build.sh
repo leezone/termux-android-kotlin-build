@@ -4,8 +4,10 @@ set -eu
 PROJECT_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 STATE_ROOT=${TERMUX_ANDROID_KOTLIN_HOME:-/data/data/com.termux/files/home/.local/share/termux-android-kotlin}
 SDK_ROOT=${ANDROID_HOME:-$STATE_ROOT/sdk}
-ANDROID_API=${ANDROID_API:-34}
-ANDROID_JAR="$SDK_ROOT/platforms/android-$ANDROID_API/android.jar"
+COMPILE_API=${ANDROID_COMPILE_API:-${ANDROID_API:-34}}
+TARGET_API=${ANDROID_TARGET_API:-$COMPILE_API}
+MIN_API=${ANDROID_MIN_API:-26}
+ANDROID_JAR="$SDK_ROOT/platforms/android-$COMPILE_API/android.jar"
 KOTLIN_LIB_DIR=${KOTLIN_LIB_DIR:-/data/data/com.termux/files/usr/opt/kotlin/lib}
 BUILD_DIR="$PROJECT_ROOT/build"
 CLASSES_DIR="$BUILD_DIR/classes"
@@ -21,7 +23,7 @@ COMPILE_CLASSPATH="$ANDROID_JAR:$KOTLIN_STD_JAR:$KOTLIN_STD_JDK7_JAR:$KOTLIN_STD
 
 if [ ! -f "$ANDROID_JAR" ]; then
   echo "Missing $ANDROID_JAR"
-  echo "Run sh ./scripts/setup-android-sdk.sh first."
+  echo "Run sh ./scripts/setup-android-sdk.sh $COMPILE_API first."
   exit 1
 fi
 
@@ -41,8 +43,8 @@ aapt2 link \
   -o "$UNSIGNED_APK" \
   --manifest "$PROJECT_ROOT/AndroidManifest.xml" \
   -I "$ANDROID_JAR" \
-  --min-sdk-version 26 \
-  --target-sdk-version "$ANDROID_API"
+  --min-sdk-version "$MIN_API" \
+  --target-sdk-version "$TARGET_API"
 
 find "$PROJECT_ROOT/src" -name '*.kt' | sort > "$BUILD_DIR/kotlin_sources.txt"
 find "$PROJECT_ROOT/src" -name '*.java' | sort > "$BUILD_DIR/java_sources.txt"

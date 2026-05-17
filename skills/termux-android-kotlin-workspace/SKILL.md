@@ -46,11 +46,11 @@ Use these scripts from the installed skill directory:
 
 1. `scripts/install-toolchain.sh`
 2. `scripts/install-re-tools.sh`
-3. `scripts/init-project.sh <target-dir> [package] [app-label]`
+3. `scripts/init-project.sh <target-dir> [package] [app-label] [compile-sdk] [target-sdk] [min-sdk]`
 
 Or one-shot:
 
-1. `scripts/bootstrap-project.sh <target-dir> [package] [app-label]`
+1. `scripts/bootstrap-project.sh <target-dir> [package] [app-label] [compile-sdk] [target-sdk] [min-sdk] [extra-platforms...]`
 
 ## Read these references when needed
 

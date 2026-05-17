@@ -63,6 +63,34 @@ skill 初始化出的新项目默认使用共享工具目录：
 - Android SDK：`~/.local/share/termux-android-kotlin/sdk`
 - apktool：`~/.local/share/termux-android-kotlin/apktool.jar`
 
+如果 `sdkmanager` 拉不到某个旧平台，可以把已有 SDK 或平台目录写进：
+
+```sh
+export ANDROID_PLATFORM_SRC=/path/to/sdk-or-platform:/another/path
+```
+
+脚手架会尝试把其中的 `android-28`、`android-34` 之类平台复制到共享 SDK 目录里。
+
+如果你确实要给 `sdkmanager` 传代理参数，可以这样：
+
+```sh
+export SDKMANAGER_PROXY_TYPE=http
+export SDKMANAGER_PROXY_HOST=127.0.0.1
+export SDKMANAGER_PROXY_PORT=2080
+```
+
+然后再执行：
+
+```sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh 28 34
+```
+
+注意：
+
+- `--proxy_host` 应该填代理服务器，例如 `127.0.0.1`
+- `mirrors.tuna.tsinghua.edu.cn` 是镜像站，不是 HTTP 代理
+- 在 Termux `aarch64` 下，优先安装 `platforms;android-XX`，不要依赖 Google 官方 `platform-tools` / `build-tools` 的 Linux 二进制
+
 ## 编译、安装、启动
 
 ```sh
@@ -129,6 +157,13 @@ sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /path
 
 ```sh
 sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/bootstrap-project.sh /path/to/my-app com.example.myapp "My App"
+```
+
+Android 9 / API 28 示例：
+
+```sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh 28 34
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /path/to/my-app com.example.myapp "My App" 28 28 28
 ```
 
 初始化后的新项目会自带：

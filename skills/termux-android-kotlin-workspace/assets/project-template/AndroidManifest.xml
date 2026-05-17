@@ -3,8 +3,8 @@
     package="__PACKAGE_NAME__">
 
     <uses-sdk
-        android:minSdkVersion="26"
-        android:targetSdkVersion="34" />
+        android:minSdkVersion="__MIN_SDK__"
+        android:targetSdkVersion="__TARGET_SDK__" />
 
     <application
         android:allowBackup="true"

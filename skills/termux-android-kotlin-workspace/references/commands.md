@@ -19,13 +19,29 @@ sh ./scripts/install-local-skill.sh
 ```sh
 sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh
 sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-re-tools.sh
-sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /path/to/my-app com.example.myapp "My App"
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /path/to/my-app com.example.myapp "My App" 34 34 26
 ```
 
 One-shot bootstrap:
 
 ```sh
-sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/bootstrap-project.sh /path/to/my-app com.example.myapp "My App"
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/bootstrap-project.sh /path/to/my-app com.example.myapp "My App" 34 34 26
+```
+
+Android 9 / API 28 example:
+
+```sh
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh 28 34
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /path/to/my-app com.example.myapp "My App" 28 28 28
+```
+
+`sdkmanager` proxy example:
+
+```sh
+export SDKMANAGER_PROXY_TYPE=http
+export SDKMANAGER_PROXY_HOST=127.0.0.1
+export SDKMANAGER_PROXY_PORT=2080
+sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh 34
 ```
 
 ## Build and run

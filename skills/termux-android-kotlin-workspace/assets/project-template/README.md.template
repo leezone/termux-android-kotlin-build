@@ -6,7 +6,7 @@
 
 ```sh
 . ./env-android.sh
-sh ./scripts/setup-android-sdk.sh
+sh ./scripts/setup-android-sdk.sh __COMPILE_SDK__
 sh ./scripts/setup-re-tools.sh
 sh ./build.sh
 sh ./install.sh
@@ -22,3 +22,9 @@ sh ./decompile.sh build/app-debug.apk
 ## 包名
 
 `__PACKAGE_NAME__`
+
+## SDK 配置
+
+- compileSdk: `__COMPILE_SDK__`
+- targetSdk: `__TARGET_SDK__`
+- minSdk: `__MIN_SDK__`

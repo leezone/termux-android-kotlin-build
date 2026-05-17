@@ -25,7 +25,9 @@
 - `env-android.sh`：导出 `JAVA_HOME`、`ANDROID_HOME`、Kotlin 路径
 - `scripts/setup-android-sdk.sh`：安装 Android SDK 平台文件
 - `scripts/setup-re-tools.sh`：安装 `jadx` 并下载 `apktool`
+- `scripts/install-local-skill.sh`：把仓库内 skill 安装到本地 Codex skills 目录
 - `skills/termux-android-kotlin-workspace/SKILL.md`：仓库内置 skill
+- `CHANGELOG.md`：仓库变更记录
 
 ## 首次环境准备
 
@@ -35,6 +37,7 @@
 cd /storage/emulated/0/termux/project/1
 sh scripts/setup-android-sdk.sh
 sh scripts/setup-re-tools.sh
+sh scripts/install-local-skill.sh
 ```
 
 当前默认环境：
@@ -78,6 +81,20 @@ sh decompile.sh build/app-debug.apk
 ```sh
 sh apktool.sh d build/app-debug.apk -o out/apktool
 ```
+
+## Skill
+
+这个仓库自带一个 repo 级 skill：
+
+- `skills/termux-android-kotlin-workspace/`
+
+安装到本地 Codex skills 目录：
+
+```sh
+sh scripts/install-local-skill.sh
+```
+
+安装后，后续在这个仓库中做构建、安装、反编译、修复脚本时，可以优先复用现有流程，而不是重新搭建工具链。
 
 ## Git 与推送
 

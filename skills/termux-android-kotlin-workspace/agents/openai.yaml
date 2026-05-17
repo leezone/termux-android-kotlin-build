@@ -1,0 +1,4 @@
+interface:
+  display_name: "Termux Android Kotlin"
+  short_description: "Build, install, launch, and decompile Android APKs in this Termux repository"
+  default_prompt: "Use $termux-android-kotlin-workspace when working in this repository to build the Kotlin app, manage the local Android SDK, or decompile APKs with the bundled scripts."

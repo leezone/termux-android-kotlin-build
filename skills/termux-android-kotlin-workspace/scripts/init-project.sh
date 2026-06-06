@@ -43,12 +43,23 @@ mkdir -p "$TARGET_DIR/scripts"
 mkdir -p "$TARGET_DIR/src/$PACKAGE_PATH"
 
 cp "$TEMPLATE_ROOT/.gitignore" "$TARGET_DIR/.gitignore"
+cp "$TEMPLATE_ROOT/build.gradle" "$TARGET_DIR/build.gradle"
+cp "$TEMPLATE_ROOT/gradle.properties" "$TARGET_DIR/gradle.properties"
 cp "$TEMPLATE_ROOT/build.sh" "$TARGET_DIR/build.sh"
 cp "$TEMPLATE_ROOT/decompile.sh" "$TARGET_DIR/decompile.sh"
 cp "$TEMPLATE_ROOT/apktool.sh" "$TARGET_DIR/apktool.sh"
+cp "$TEMPLATE_ROOT/gradlew" "$TARGET_DIR/gradlew"
+cp "$TEMPLATE_ROOT/gradlew.bat" "$TARGET_DIR/gradlew.bat"
 cp "$TEMPLATE_ROOT/install.sh" "$TARGET_DIR/install.sh"
 cp "$TEMPLATE_ROOT/scripts/setup-android-sdk.sh" "$TARGET_DIR/scripts/setup-android-sdk.sh"
 cp "$TEMPLATE_ROOT/scripts/setup-re-tools.sh" "$TARGET_DIR/scripts/setup-re-tools.sh"
+mkdir -p "$TARGET_DIR/gradle/wrapper"
+cp "$TEMPLATE_ROOT/gradle/wrapper/gradle-wrapper.jar" "$TARGET_DIR/gradle/wrapper/gradle-wrapper.jar"
+cp "$TEMPLATE_ROOT/gradle/wrapper/gradle-wrapper.properties" "$TARGET_DIR/gradle/wrapper/gradle-wrapper.properties"
+
+sed \
+  -e "s|__PROJECT_NAME__|$TARGET_BASENAME|g" \
+  "$TEMPLATE_ROOT/settings.gradle" > "$TARGET_DIR/settings.gradle"
 
 sed \
   -e "s|__PACKAGE_NAME__|$PACKAGE_NAME|g" \
@@ -94,4 +105,5 @@ echo "  cd $TARGET_DIR"
 echo "  . ./env-android.sh"
 echo "  sh ./scripts/setup-android-sdk.sh"
 echo "  sh ./scripts/setup-re-tools.sh"
-echo "  sh ./build.sh"
+echo "  sh ./gradlew lint"
+echo "  sh ./gradlew assembleDebug"

@@ -103,6 +103,15 @@ sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh 
 ```sh
 cd <repo-dir>
 . ./env-android.sh
+sh ./gradlew lint
+sh ./gradlew assembleDebug
+sh ./gradlew installDebug
+sh ./gradlew launchDebug
+```
+
+如果你更想直接走原始 Termux 脚本，也可以继续：
+
+```sh
 sh build.sh
 sh install.sh
 sh launch.sh
@@ -114,12 +123,18 @@ sh launch.sh
 - 未签名 APK：`build/app-unsigned.apk`
 - 调试签名：`debug.keystore`
 
+补充说明：
+
+- 当前仓库位于 Android 共享存储 `/storage/emulated/0/...`
+- 这类目录通常不能直接执行脚本，所以 `./gradlew` 可能报 `Permission denied`
+- 在这里请使用 `sh ./gradlew ...`
+
 ## 反编译用法
 
 反编译当前仓库生成的 APK：
 
 ```sh
-sh decompile.sh build/app-debug.apk
+sh ./gradlew decompileDebug
 ```
 
 输出目录：
@@ -175,6 +190,11 @@ sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/init-project.sh /path
 
 初始化后的新项目会自带：
 
+- `gradlew`
+- `gradle/wrapper/`
+- `build.gradle`
+- `settings.gradle`
+- `gradle.properties`
 - `build.sh`
 - `install.sh`
 - `launch.sh`
@@ -225,4 +245,4 @@ export https_proxy=http://127.0.0.1:2080
 
 ## English Summary
 
-This repository provides a Termux-based Android workflow for Kotlin APK build, install, launch, and reverse engineering on a real Android device. Use `sh build.sh` to build the APK, `sh install.sh` to install it, and `sh decompile.sh build/app-debug.apk` to export Java sources, smali, and metadata.
+This repository provides a Termux-based Android workflow for Kotlin APK build, install, launch, and reverse engineering on a real Android device. Use `sh ./gradlew lint`, `sh ./gradlew assembleDebug`, and `sh ./gradlew decompileDebug` as the main entry points, with the shell scripts kept as the underlying compatible pipeline.

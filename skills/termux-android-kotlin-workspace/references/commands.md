@@ -56,6 +56,15 @@ sh ~/.codex/skills/termux-android-kotlin-workspace/scripts/install-toolchain.sh 
 ## Build and run
 
 ```sh
+sh ./gradlew lint
+sh ./gradlew assembleDebug
+sh ./gradlew installDebug
+sh ./gradlew launchDebug
+```
+
+Legacy direct script entry points:
+
+```sh
 sh ./build.sh
 sh ./install.sh
 sh ./launch.sh
@@ -64,7 +73,7 @@ sh ./launch.sh
 ## Reverse engineering
 
 ```sh
-sh ./decompile.sh build/app-debug.apk
+sh ./gradlew decompileDebug
 sh ./apktool.sh d build/app-debug.apk -o out/apktool
 ```
 

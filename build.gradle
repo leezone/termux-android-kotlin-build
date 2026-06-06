@@ -1,0 +1,141 @@
+plugins {
+    id 'base'
+}
+
+import org.gradle.api.tasks.Exec
+import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.wrapper.Wrapper
+
+def shellPath = '/data/data/com.termux/files/usr/bin/sh'
+def buildScript = layout.projectDirectory.file('build.sh').asFile
+def installScript = layout.projectDirectory.file('install.sh').asFile
+def launchScript = layout.projectDirectory.file('launch.sh').asFile
+def decompileScript = layout.projectDirectory.file('decompile.sh').asFile
+def apkOutput = layout.projectDirectory.file('build/app-debug.apk').asFile
+def scriptFiles = fileTree(projectDir) {
+    include 'gradlew'
+    include '*.sh'
+    include 'scripts/**/*.sh'
+}
+
+tasks.register('assembleDebug', Exec) {
+    group = 'build'
+    description = 'Build the debug APK through the existing Termux shell pipeline.'
+    commandLine shellPath, buildScript.absolutePath
+    inputs.files(fileTree('src'))
+    inputs.file('AndroidManifest.xml')
+    inputs.file('build.sh')
+    inputs.file('env-android.sh')
+    outputs.file(apkOutput)
+}
+
+tasks.named('assemble') {
+    dependsOn 'assembleDebug'
+}
+
+tasks.register('installDebug', Exec) {
+    group = 'installation'
+    description = 'Open the Android package installer for the debug APK.'
+    commandLine shellPath, installScript.absolutePath
+    dependsOn 'assembleDebug'
+}
+
+tasks.register('launchDebug', Exec) {
+    group = 'application'
+    description = 'Launch the installed debug application.'
+    commandLine shellPath, launchScript.absolutePath
+}
+
+tasks.register('decompileDebug', Exec) {
+    group = 'verification'
+    description = 'Decompile the built debug APK with the existing reverse-engineering script.'
+    commandLine shellPath, decompileScript.absolutePath, apkOutput.absolutePath
+    dependsOn 'assembleDebug'
+}
+
+tasks.register('lintScripts', Exec) {
+    group = 'verification'
+    description = 'Run shell syntax checks over repository scripts.'
+    commandLine shellPath, '-n'
+    args scriptFiles.files.collect { it.absolutePath }
+    inputs.files(scriptFiles)
+}
+
+tasks.register('lintProject') {
+    group = 'verification'
+    description = 'Validate required project files and source layout.'
+    inputs.file('AndroidManifest.xml')
+    inputs.dir('src')
+    doLast {
+        def requiredFiles = [
+            'README.md',
+            'AndroidManifest.xml',
+            'build.gradle',
+            'settings.gradle',
+            'gradle.properties',
+            'gradlew',
+            'gradle/wrapper/gradle-wrapper.jar',
+            'gradle/wrapper/gradle-wrapper.properties',
+            'build.sh',
+            'install.sh',
+            'launch.sh',
+            'env-android.sh',
+        ]
+        requiredFiles.each { path ->
+            if (!file(path).isFile()) {
+                throw new GradleException("Missing required file: ${path}")
+            }
+        }
+
+        def gradlewFile = file('gradlew')
+        if (!gradlewFile.text.startsWith('#!/bin/sh')) {
+            throw new GradleException('gradlew does not look like a POSIX wrapper script.')
+        }
+
+        if (!file('src').isDirectory()) {
+            throw new GradleException('Missing src/ directory.')
+        }
+
+        def kotlinSources = fileTree('src') {
+            include '**/*.kt'
+            include '**/*.java'
+        }
+        if (kotlinSources.isEmpty()) {
+            throw new GradleException('No Kotlin or Java sources found under src/.')
+        }
+    }
+}
+
+tasks.register('lint') {
+    group = 'verification'
+    description = 'Run repository quality checks without external dependencies.'
+    dependsOn 'lintScripts', 'lintProject'
+}
+
+tasks.named('check') {
+    dependsOn 'lint'
+}
+
+tasks.named('clean') {
+    doFirst {
+        delete file('decompiled')
+    }
+}
+
+tasks.register('syncWrapperToTemplate', Copy) {
+    group = 'build setup'
+    description = 'Copy Gradle wrapper files into the bundled project template.'
+    dependsOn 'wrapper'
+    from(layout.projectDirectory) {
+        include 'gradlew'
+        include 'gradlew.bat'
+        include 'gradle/wrapper/gradle-wrapper.jar'
+        include 'gradle/wrapper/gradle-wrapper.properties'
+    }
+    into(layout.projectDirectory.dir('skills/termux-android-kotlin-workspace/assets/project-template'))
+}
+
+tasks.wrapper {
+    gradleVersion = '9.5.1'
+    distributionType = Wrapper.DistributionType.BIN
+}

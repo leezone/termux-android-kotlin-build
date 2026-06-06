@@ -21,17 +21,20 @@ This skill is repo-specific. Use it when the current workspace is this repositor
 
 1. Source the environment:
    `. ./env-android.sh`
-2. Build the app:
-   `sh ./build.sh`
-3. Install and launch:
-   `sh ./install.sh`
-   `sh ./launch.sh`
-4. Decompile an APK:
-   `sh ./decompile.sh build/app-debug.apk`
+2. Run quality checks:
+   `sh ./gradlew lint`
+3. Build the app:
+   `sh ./gradlew assembleDebug`
+4. Install and launch:
+   `sh ./gradlew installDebug`
+   `sh ./gradlew launchDebug`
+5. Decompile an APK:
+   `sh ./gradlew decompileDebug`
 
 ## Preferred workflow
 
 - Reuse the existing scripts instead of rebuilding the Android toolchain manually.
+- Prefer `sh ./gradlew` for normal project entry points; shared storage on Android often blocks direct script execution.
 - Use `sh ./scripts/setup-android-sdk.sh` for SDK provisioning.
 - Use `sh ./scripts/setup-re-tools.sh` for `jadx` and `apktool`.
 - Edit app code under `src/`.
@@ -61,6 +64,8 @@ Or one-shot:
 ## Paths that matter
 
 - `./build.sh`
+- `./gradlew`
+- `./build.gradle`
 - `./decompile.sh`
 - `./apktool.sh`
 - `./env-android.sh`

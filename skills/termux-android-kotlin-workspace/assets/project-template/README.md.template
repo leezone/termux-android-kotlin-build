@@ -8,6 +8,15 @@
 . ./env-android.sh
 sh ./scripts/setup-android-sdk.sh __COMPILE_SDK__
 sh ./scripts/setup-re-tools.sh
+sh ./gradlew lint
+sh ./gradlew assembleDebug
+sh ./gradlew installDebug
+sh ./gradlew launchDebug
+```
+
+也可以继续直接使用原始脚本：
+
+```sh
 sh ./build.sh
 sh ./install.sh
 sh ./launch.sh
@@ -16,7 +25,7 @@ sh ./launch.sh
 ## 反编译
 
 ```sh
-sh ./decompile.sh build/app-debug.apk
+sh ./gradlew decompileDebug
 ```
 
 ## 包名
